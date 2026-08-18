@@ -352,17 +352,13 @@ class SheferTwoPosOrbitSolver(TwoPosOrbitSolver):
             is the main result of the orbit determination process.
 
         _getAllP():
-            Compute all possible values of p by finding zeros of the function 
-            F(x) within a given range.
+            Compute all possible values of p by finding zeros of the function F(x) within a given range.
 
         _getEta(p):
             Compute the auxiliary value eta defined in Shefer's equation (2).
 
         solve():
-            Solve the orbit determination problem. First attempts to find a 
-            solution using Shefer's initial guess. If the solution fails, 
-            employs a robust method to examine all possible zeros of F(x) 
-            and determine a valid orbit.
+            Solve the orbit determination problem. First attempts to find a solution using Shefer's initial guess. If the solution fails, employs a robust method to examine all possible zeros of F(x) and determine a valid orbit.
     """
     def __init__(self, *args, **kwargs):
         self.robust = kwargs.pop('robust', False)
@@ -540,10 +536,11 @@ class SheferTwoPosOrbitSolver(TwoPosOrbitSolver):
         w = np.where((np.abs(roots.imag) < 3e-16) & (roots.real > 0))
         if len(w) > 1:
             raise RuntimeError(
-                "Found more than one positive, real root!  {}".format(roots))
+                    "Found more than one positive, real root!  {}".format(roots)
+                )
         if len(w) == 0:
             raise RuntimeError(
-                "Found no positive real roots!  {}".format(roots))
+                    "Found no positive real roots!  {}".format(roots))
         y = roots[w][0].real
         ysqr = y * y
         # Shefer (A.13)
@@ -763,7 +760,7 @@ class ThreeAngleOrbitSolver:
 
     def _getEta(self, r1, r2, t1, t2):
         """Use Shefer algorithm to improve eta estimates."""
-        solver = SheferTwoPosOrbitSolver(r1, r2, t1, t2)
+        solver = SheferTwoPosOrbitSolver(r1, r2, t1, t2, mu=self.mu)
         p = solver._getP()
         eta = solver._getEta(p)
         return eta
@@ -789,5 +786,5 @@ class ThreeAngleOrbitSolver:
             dn1, n1 = newn1 - n1, newn1
             dn3, n3 = newn3 - n3, newn3
             niter += 1
-        solver = SheferTwoPosOrbitSolver(r1, r3, self.t1, self.t3)
+        solver = SheferTwoPosOrbitSolver(r1, r3, self.t1, self.t3, mu=self.mu)
         return solver.solve()
