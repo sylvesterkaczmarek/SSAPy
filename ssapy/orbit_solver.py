@@ -317,8 +317,7 @@ class SheferTwoPosOrbitSolver(TwoPosOrbitSolver):
             equation (A.5).
 
         D(x):
-            Compute the D(x) function and its derivative based on Shefer's 
-            equation (43).
+            Compute D(x) and its derivative, dD(x)/dx, from Shefer (43).
 
         semiMajorAxis(x):
             Compute the semi-major axis a(x) and its derivative based on 
@@ -352,13 +351,17 @@ class SheferTwoPosOrbitSolver(TwoPosOrbitSolver):
             is the main result of the orbit determination process.
 
         _getAllP():
-            Compute all possible values of p by finding zeros of the function F(x) within a given range.
+            Compute all possible values of p by finding zeros of the function 
+            F(x) within a given range.
 
         _getEta(p):
             Compute the auxiliary value eta defined in Shefer's equation (2).
 
         solve():
-            Solve the orbit determination problem. First attempts to find a solution using Shefer's initial guess. If the solution fails, employs a robust method to examine all possible zeros of F(x) and determine a valid orbit.
+            Solve the orbit determination problem. First attempts to find a 
+            solution using Shefer's initial guess. If the solution fails, 
+            employs a robust method to examine all possible zeros of F(x) 
+            and determine a valid orbit.
     """
     def __init__(self, *args, **kwargs):
         self.robust = kwargs.pop('robust', False)
@@ -511,8 +514,7 @@ class SheferTwoPosOrbitSolver(TwoPosOrbitSolver):
             w = np.where((np.abs(roots.imag) < 3e-16) & (roots.real > 0))
             if len(w) > 1:
                 raise RuntimeError(
-                    "Found more than one positive, real root!  {}".format(roots)
-                )
+                    "Found more than one positive, real root!  {}".format(roots))
             if len(w) == 0:
                 raise RuntimeError(
                     "Found no positive real roots!  {}".format(roots))
@@ -536,11 +538,10 @@ class SheferTwoPosOrbitSolver(TwoPosOrbitSolver):
         w = np.where((np.abs(roots.imag) < 3e-16) & (roots.real > 0))
         if len(w) > 1:
             raise RuntimeError(
-                    "Found more than one positive, real root!  {}".format(roots)
-                )
+                "Found more than one positive, real root!  {}".format(roots))
         if len(w) == 0:
             raise RuntimeError(
-                    "Found no positive real roots!  {}".format(roots))
+                "Found no positive real roots!  {}".format(roots))
         y = roots[w][0].real
         ysqr = y * y
         # Shefer (A.13)
