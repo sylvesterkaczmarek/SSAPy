@@ -224,11 +224,12 @@ class AccelSolRad(Accel):
         kw = dict()
         kw.update(self.defaultkw)
         kw.update(kwargs)
+        cr = kw['CR'] if 'CR' in kw else kw['cr']
         rr = r - sunPos(t)
         P0 = 4.56e-6  # Solar rad pressure [N/m^2]   MG eqn (3.69)
         AU2 = 2.2379522708536898e22  # 1 AU squared [m^2]
         # MG (3.75)
-        return P0 * kw['CR'] * kw['area'] / kw['mass'] * rr / norm(rr)**3 * AU2
+        return P0 * cr * kw['area'] / kw['mass'] * rr / norm(rr)**3 * AU2
 
     def __hash__(self):
         return hash((
@@ -304,6 +305,7 @@ class AccelEarthRad(Accel):
         kw = dict()
         kw.update(self.defaultkw)
         kw.update(kwargs)
+        cr = kw['CR'] if 'CR' in kw else kw['cr']
         r_sun = sunPos(t)
         d_sun = norm(r_sun)
         r = np.asarray(r)
@@ -319,7 +321,7 @@ class AccelEarthRad(Accel):
         k = (1 + cosi) / 2
         # Astronomical Algorithms, Chap 41, Jean Meeus.
         pressure = (459 * k + 230) / 299792458 * r * EARTH_RADIUS**2 / normr**3
-        accel = pressure * kw['CR'] * kw['area'] / kw['mass']
+        accel = pressure * cr * kw['area'] / kw['mass']
         return accel
 
     def __hash__(self):
@@ -392,6 +394,7 @@ class AccelDrag(Accel):
         kw = dict()
         kw.update(self.defaultkw)
         kw.update(kwargs)
+        cd = kw['CD'] if 'CD' in kw else kw['cd']
         mjd_tt = _gpsToTT(t)
         if _T is None:
             if self._t is None or np.abs(t - self._t) > self.recalc_threshold:
@@ -415,7 +418,7 @@ class AccelDrag(Accel):
             print(f"ra_sun = {ra_sun}")
             print(f"dec_sun = {dec_sun}")
             raise ValueError("non finite density")
-        a_tod = -0.5 * kw['CD'] * kw['area'] / kw['mass'] * density * v_rel * norm(v_rel)
+        a_tod = -0.5 * cd * kw['area'] / kw['mass'] * density * v_rel * norm(v_rel)
         return _T.T @ a_tod
 
     def __hash__(self):
