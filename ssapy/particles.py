@@ -81,6 +81,10 @@ class Particles:
                 if lnpriors.ndim != 2:
                     raise ValueError("Supplied lnpriors do not match expected shape from particles")
                 self._lnpriors = lnpriors.ravel()
+            if ln_weights is not None:
+                ln_weights = np.asarray(ln_weights).ravel()
+                if ln_weights.size != particles.shape[0]:
+                    raise ValueError("Supplied ln_weights do not match expected shape from particles")
         self.particles = particles
         self.rvprobability = rvprobability
         if ln_weights is None:
