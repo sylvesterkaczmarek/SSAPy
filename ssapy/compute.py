@@ -1050,8 +1050,8 @@ def find_passes(
         Earth observers for which to check satellite visibility.
     tStart : float or astropy.time.Time
         Beginning of search window.
-        If float, then should correspond to GPS seconds; i.e., seconds since
-        1980-01-06 00:00:00 UTC
+        If float, then should correspond to GPS seconds; i.e., seconds
+        since 1980-01-06 00:00:00 UTC
     tSpan : float or Quantity
         Time span in which to search for passes.
         If float, then seconds.
@@ -1116,8 +1116,8 @@ def refine_pass(
     time : float or astropy.time.Time
         A time when satellite is visible to observer.  (Found using
         find_passes, for instance)
-        If float, then should correspond to GPS seconds; i.e., seconds since
-        1980-01-06 00:00:00 UTC
+        If float, then should correspond to GPS seconds; i.e., seconds
+        since 1980-01-06 00:00:00 UTC
     propagator : Propagator, optional
         The propagator instance to use.
     horizon : float or Quantity, optional
